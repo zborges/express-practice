@@ -48,6 +48,26 @@ app.post("/comments", async (req, res) => {
         id: id
     })
 })
+
+app.patch("/comments/:id", async (req, res) => {
+    const id = req.params.id;
+    const content = req.body.content;
+
+    if (!content) {
+        return res.sendStatus(400)
+    }
+
+    try {
+        await fs.writeFile(`data/comments/${id}.txt`, content)
+    } catch (err) {
+        return res.sendStatus(404)
+    }
+
+    res.json({
+        content: content
+    })
+})
+
 app.listen(3000, () => {
     console.log('Server started');
 });
